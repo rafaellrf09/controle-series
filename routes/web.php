@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect('/series');
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/email', function () {
