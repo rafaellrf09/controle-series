@@ -35,19 +35,14 @@ class SeriesController extends Controller
     {
         $serie = $this->repository->add($request);
 
-        $users = User::all();
+        $seriesCreatedEvent = new \App\Events\SeriesCreated(
+            $serie->nome,
+            $serie->id,
+            $request->seasonsQty,
+            $request->episodesPerSeason,
+        );
 
-        foreach ($users as $index => $user) {
-            $email = new SeriesCreated(
-                $serie->nome,
-                $serie->id,
-                $request->seasonsQty,
-                $request->episodesPerSeason,
-            );
-            $when = now()->addSeconds($index * 5);
-            Mail::to($user)->later($when, $email);
-        }
-
+        event($seriesCreatedEvent);
 
         return to_route('series.index')
             ->with('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso");
