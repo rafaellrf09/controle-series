@@ -40,4 +40,9 @@ class EloquentSeriesRepository implements SeriesRepository
             return $serie;
         });
     }
+
+    public function update(SeriesFormRequest $request, int $series): int
+    {
+        return Series::where("id", $series)->update(["nome" => $request->nome]);
+    }
 }
