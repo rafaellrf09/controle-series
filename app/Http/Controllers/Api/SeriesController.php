@@ -28,11 +28,9 @@ class SeriesController extends Controller
         return $series;
     }
 
-    public function update(SeriesFormRequest $request, Series $series)
+    public function update(SeriesFormRequest $request, int $series)
     {
-        $series->fill($request->all());
-        $series->save();
-        return response()->json($series);
+        return response()->json($this->seriesRepository->update($request, $series), 200);
     }
 
     public function destroy(int $series)
