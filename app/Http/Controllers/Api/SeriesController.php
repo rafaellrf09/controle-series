@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SeriesFormRequest;
 use App\Models\Series;
 use App\Repositories\SeriesRepository;
+use Illuminate\Http\Request;
 
 class SeriesController extends Controller
 {
@@ -13,9 +14,14 @@ class SeriesController extends Controller
         private SeriesRepository $seriesRepository
     ) {
     }
-    public function index()
+    public function index(Request $request)
     {
-        return Series::all();
+        $query = Series::query();
+        if ($request->has("nome")) {
+            $query->where("nome","like","%". $request->get("nome") ."%");
+        }
+
+        return $query->paginate(5);
     }
 
     public function store(SeriesFormRequest $request)
@@ -26,8 +32,8 @@ class SeriesController extends Controller
     public function show(int $series)
     {
         $seriesModel = Series::with("seasons.episodes")->find($series);
-        if(!$seriesModel) {
-            return response()->json(["message"=> "series not found"],404);
+        if (!$seriesModel) {
+            return response()->json(["message" => "series not found"], 404);
         }
         return $seriesModel;
     }
