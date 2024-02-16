@@ -26,7 +26,7 @@ class SeriesFormRequest extends FormRequest
     {
         return [
             'nome' => ['required', 'min:2'],
-            'cover' => [File::image()->min(1024)->max(12 * 1024)],
+            'cover' => [File::image()->min(94)->max(12 * 1024)],
         ];
     }
 }
